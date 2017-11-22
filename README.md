@@ -57,6 +57,12 @@ $ make dps
 // List docker images
 $ make img
 
+// Show consumer logs
+$ make logs
+
+// Run producer container
+$ make prod
+
 // Stop all running contianers and destroy images
 $ make clean
 ```

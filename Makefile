@@ -20,6 +20,12 @@ dps:
 img:
 	$(DK) images
 
+logs:
+	$(DC) logs consumer
+
+prod:
+	$(DC) run producer
+
 clean:
 	$(DK) stop $(shell $(DK) ps -a -q) && $(DK) rm $(shell $(DK) ps -a -q)
 	$(DK) rmi -f $(shell $(DK) images -q)
