@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import pika
 import json
 import logging
+import pika
 
 logging.basicConfig(filename='/var/log/app/consumer.log', level=logging.DEBUG)
 

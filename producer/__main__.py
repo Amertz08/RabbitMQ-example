@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import pika
+import hashlib
 import json
 import logging
+import pika
 
 logging.basicConfig(filename='/var/log/app/producer.log', level=logging.DEBUG)
 
@@ -13,9 +14,18 @@ def producer():
 
     channel.queue_declare(queue='hello')
 
+    '''
+    This creates the same hash value each time so we can use the Raspberry Pi
+    serial number to create a unique ID for each device
+    '''
+    device_id = hashlib.sha1(b'RPi-serial-number').hexdigest()
+
     # Currently a python dict
     data = {
-        'key': 'myvalue'
+        'device_id': device_id,
+        'data': {
+            'key': 'value'
+        }
     }
 
     channel.basic_publish(exchange='',
