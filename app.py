@@ -8,11 +8,6 @@ channel = None
 TYPES = ['producer', 'consumer']
 
 
-class ClientTypeError(Exception):
-    def __init__(self, _type):
-        super(ClientTypeError, self).__init__(f'{_type} is not a valid type {TYPES}')
-
-
 def producer():
     global connection, channel
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
@@ -61,7 +56,7 @@ def main():
 
     client_type = args.type.lower()
     if client_type not in TYPES:
-        raise ClientTypeError(client_type)
+        print(f'{client_type} is not a valid type {TYPES}')
     elif client_type == TYPES[0]:
         producer()
     elif client_type == TYPES[1]:
