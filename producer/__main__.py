@@ -3,13 +3,8 @@
 import pika
 import json
 
-connection = None
-channel = None
-TYPES = ['producer', 'consumer']
-
 
 def producer():
-    global connection, channel
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
 
