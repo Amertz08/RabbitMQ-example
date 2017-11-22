@@ -2,6 +2,8 @@
 
 Requires Docker and Docker Compose to be installed.
 
+## Using Docker & Docker Compose commands
+
 ```bash
 // Build the containers in detached mode
 $ docker-compose up -d
@@ -32,4 +34,29 @@ root@c82061d93b6c:/usr/src/app example -h
 
 // Shutdown all containers
 $ docker-compose down
+```
+
+## Makefile
+
+```bash
+// Build container images
+$ make build
+
+// Run in background
+$ make run
+
+// Stop running containers
+$ make down
+
+// Use docker-compose to check running containers
+$ make ps
+
+// Use docker to check running containers
+$ make dps
+
+// List docker images
+$ make img
+
+// Stop all running contianers and destroy images
+$ make clean
 ```
