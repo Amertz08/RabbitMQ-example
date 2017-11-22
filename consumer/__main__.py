@@ -11,7 +11,6 @@ logging.basicConfig(filename='/var/log/app/consumer.log', level=logging.DEBUG)
 
 client = MongoClient('db')
 db = client.test_db
-collection = db.test_collection
 
 
 def consumer():
