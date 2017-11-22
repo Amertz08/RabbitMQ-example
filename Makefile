@@ -34,9 +34,17 @@ img:
 conlog:
 	$(DC) logs consumer
 
+# Shows application logging for consumer container
+conflog:
+	cat ./logs/consumer.log | grep root.
+
 # Logs for producer container
 prodlog:
 	$(DC) logs producer
+
+# Shows application logging for producer container
+prodflog:
+	cat ./logs/producer.log | grep root.
 
 # Logs for RabbitMQ
 rablog:
