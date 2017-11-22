@@ -3,7 +3,8 @@ DC=docker-compose
 
 
 build:
-	$(DC) build
+	$(DC) pull
+	$(DC) build --force-rm
 
 run:
 	$(DC) up -d
@@ -25,6 +26,9 @@ logs:
 
 prod:
 	$(DC) run producer
+
+rmi:
+	$(DK) rmi -f $(shell $(DK) images -q)
 
 clean:
 	$(DK) stop $(shell $(DK) ps -a -q) && $(DK) rm $(shell $(DK) ps -a -q)
