@@ -6,17 +6,20 @@ Requires Docker and Docker Compose to be installed.
 // Build the containers in detached mode
 $ docker-compose up -d
 
-// Check that containers are up and running
+// Check that consumer and RabbitMQ containers are up and running
 $ docker ps
 
-// Start the consumer container
-$ docker-compose run consumer
+// Run the producer function from outside the container
+$ docker-compose run producer example producer
 
-// In another terminal run the producer
+// Or enter producer container and run from inside it
 $ docker-compose run producer
 
 // Now in container
-root@c82061d93b6c:/usr/src/app#
+root@c82061d93b6c:/usr/src/app# example producer
+
+// Check consumer logs
+$ docker-compose logs consumer
 
 // To startup and enter an instance of the consumer container
 $ docker-compose run consumer bash
