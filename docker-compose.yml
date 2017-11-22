@@ -1,0 +1,9 @@
+version: '3'
+services:
+  app:
+    build: .
+
+  rabbit:
+    image: rabbitmq:3.6
+
+
