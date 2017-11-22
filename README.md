@@ -2,6 +2,39 @@
 
 Requires Docker and Docker Compose to be installed.
 
+## Makefile
+
+This is probably the easiest way to run if not familiar with Docker & Docker Compose CLI
+
+```bash
+// Build container images
+$ make build
+
+// Run in background
+$ make run
+
+// Stop running containers
+$ make down
+
+// Use docker-compose to check running containers
+$ make ps
+
+// Use docker to check running containers
+$ make dps
+
+// List docker images
+$ make img
+
+// Show consumer logs
+$ make logs
+
+// Run producer container
+$ make prod
+
+// Stop all running contianers and destroy images
+$ make clean
+```
+
 ## Using Docker & Docker Compose commands
 
 ```bash
@@ -34,35 +67,4 @@ root@c82061d93b6c:/usr/src/app example -h
 
 // Shutdown all containers
 $ docker-compose down
-```
-
-## Makefile
-
-```bash
-// Build container images
-$ make build
-
-// Run in background
-$ make run
-
-// Stop running containers
-$ make down
-
-// Use docker-compose to check running containers
-$ make ps
-
-// Use docker to check running containers
-$ make dps
-
-// List docker images
-$ make img
-
-// Show consumer logs
-$ make logs
-
-// Run producer container
-$ make prod
-
-// Stop all running contianers and destroy images
-$ make clean
 ```
