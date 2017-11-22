@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import arrow
 import hashlib
 import json
 import logging
@@ -23,6 +24,7 @@ def producer():
     # Currently a python dict
     data = {
         'device_id': device_id,
+        'timestamp': arrow.now().timestamp,
         'data': {
             'key': 'value'
         }
