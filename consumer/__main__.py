@@ -3,8 +3,15 @@
 import json
 import logging
 import pika
+import pprint
+
+from pymongo import MongoClient
 
 logging.basicConfig(filename='/var/log/app/consumer.log', level=logging.DEBUG)
+
+client = MongoClient('db')
+db = client.test_db
+collection = db.test_collection
 
 
 def consumer():
@@ -17,6 +24,10 @@ def consumer():
         msg = f' [x] Received: {data} type {type(data)}'
         print(msg)
         logging.info(msg)
+
+        bot_logs = db.bot_logs
+        bot_logs.insert_one(data)
+        pprint.pprint(bot_logs.find_one())
 
     channel.basic_consume(callback,
                           queue='hello',

@@ -19,3 +19,6 @@ services:
 
   rabbit:
     image: rabbitmq:3.6
+
+  db:
+    image: mongo:3.5
