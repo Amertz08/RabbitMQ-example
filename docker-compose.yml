@@ -7,7 +7,7 @@ services:
     build: .
     depends_on:
       - rabbit
-    command: example consumer
+    command: consumer-entrypoint.sh
     restart: always
 
   rabbit:
