@@ -6,6 +6,7 @@ import logging
 
 logging.basicConfig(filename='/var/log/app/producer.log', level=logging.DEBUG)
 
+
 def producer():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
