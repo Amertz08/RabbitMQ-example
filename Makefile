@@ -42,7 +42,7 @@ rablog:
 	$(DC) logs rabbit
 
 # Run producer container
-runprod:
+prod:
 	$(DC) run producer
 
 # Removes all images
