@@ -20,13 +20,14 @@ def producer():
 
     channel.queue_declare(queue='hello')
 
+    # Currently a python dict
     data = {
         'key': 'myvalue'
     }
 
     channel.basic_publish(exchange='',
                           routing_key='hello',
-                          body=json.dumps(data))
+                          body=json.dumps(data))  # Encode as a JSON string
     print(f' [x] Sent {data}')
     connection.close()
 
@@ -38,13 +39,15 @@ def consumer():
     channel.queue_declare(queue='hello')
 
     def callback(ch, method, properties, body):
-        data = json.loads(body)
+        data = json.loads(body)  # decode JSON string into a python dict
         print(f' [x] Received: {data} type {type(data)}')
 
     channel.basic_consume(callback,
                           queue='hello',
                           no_ack=True)
     print(' [*] Waiting for messages. To exit press CTRL+C')
+
+    # Infinite loop
     try:
         channel.start_consuming()
     except KeyboardInterrupt:
