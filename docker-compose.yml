@@ -1,13 +1,12 @@
 version: '3'
 services:
   producer:
-    build: .
+    build: ./producer
 
   consumer:
-    build: .
+    build: ./consumer
     depends_on:
       - rabbit
-    command: ./consumer-entrypoint.sh
     restart: always
 
   rabbit:
