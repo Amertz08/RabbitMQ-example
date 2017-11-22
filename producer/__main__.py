@@ -2,7 +2,9 @@
 
 import pika
 import json
+import logging
 
+logging.basicConfig(filename='/var/log/app/producer.log', level=logging.DEBUG)
 
 def producer():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
@@ -18,7 +20,9 @@ def producer():
     channel.basic_publish(exchange='',
                           routing_key='hello',
                           body=json.dumps(data))  # Encode as a JSON string
-    print(f' [x] Sent {data}')
+    msg = f' [x] Sent {data}'
+    print(msg)
+    logging.info(msg)
     connection.close()
 
 if __name__ == '__main__':

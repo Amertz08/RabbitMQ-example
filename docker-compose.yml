@@ -1,13 +1,21 @@
-version: '3'
+version: '3.2'
 services:
   producer:
     build: ./producer
+    volumes:
+      - type: bind
+        source: ./logs
+        target: /var/log/app
 
   consumer:
     build: ./consumer
     depends_on:
       - rabbit
     restart: always
+    volumes:
+      - type: bind
+        source: ./logs
+        target: /var/log/app
 
   rabbit:
     image: rabbitmq:3.6

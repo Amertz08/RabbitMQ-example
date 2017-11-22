@@ -6,6 +6,7 @@ CONTS=$(shell $(DK) ps -a -q)
 
 # Builds images
 build:
+	./check-log-dir.sh
 	$(DC) pull
 	$(DC) build --force-rm
 
