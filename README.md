@@ -2,11 +2,9 @@
 
 Requires Docker and Docker Compose to be installed.
 
-## Makefile
+## [Makefile](Makefile)
 
 This is probably the easiest way to run if not familiar with Docker & Docker Compose CLI
-
-[Makefile](Makefile)
 
 ## Using Docker & Docker Compose commands
 
