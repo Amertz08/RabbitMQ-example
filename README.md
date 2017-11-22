@@ -18,13 +18,13 @@ $ docker-compose up -d
 $ docker ps
 
 // Run the producer function from outside the container
-$ docker-compose run producer example producer
-
-// Or enter producer container and run from inside it
 $ docker-compose run producer
 
+// Or enter producer container and run from inside it
+$ docker-compose run producer bash
+
 // Now in container
-root@c82061d93b6c:/usr/src/app# example producer
+root@c82061d93b6c:/usr/src/producer# python .
 
 // Check consumer logs
 $ docker-compose logs consumer
@@ -33,10 +33,7 @@ $ docker-compose logs consumer
 $ docker-compose run consumer bash
 
 // Now in container
-root@c82061d93b6c:/usr/src/app#
-
-// Access application via command line
-root@c82061d93b6c:/usr/src/app example -h
+root@c82061d93b6c:/usr/src/consumer# python .
 
 // Shutdown all containers
 $ docker-compose down
