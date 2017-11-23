@@ -63,7 +63,7 @@ rprod:
 	$(DC) run producer
 
 # Build CLI container
-cli:
+cl:
 	$(DC) build cli
 
 # Removes all images
