@@ -8,4 +8,4 @@ RUN pip install \
 ADD . /usr/src/producer
 WORKDIR /usr/src/producer
 
-CMD python .
+CMD python app.py

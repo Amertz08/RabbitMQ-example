@@ -8,4 +8,4 @@ RUN pip install \
 ADD . /usr/src/consumer
 WORKDIR /usr/src/consumer
 
-CMD ./wait-for-it.sh rabbit:4369 -- python .
+CMD ./wait-for-it.sh rabbit:4369 -- python app.py
