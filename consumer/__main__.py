@@ -16,7 +16,7 @@ db = client.test_db
 def consumer():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
-    channel.queue_declare(queue='hello')
+    channel.queue_declare(queue='device_logs')
 
     def callback(ch, method, properties, body):
         data = json.loads(body)  # decode JSON string into a python dict

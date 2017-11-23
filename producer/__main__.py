@@ -13,7 +13,7 @@ def producer():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
 
-    channel.queue_declare(queue='hello')
+    channel.queue_declare(queue='device_logs')
 
     # Create two unique device ids to provide more example data
     timestamp = arrow.now().timestamp
