@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import arrow
+import pika
+import pprint
+import json
 import sys
 
 from bson.son import SON
@@ -63,6 +66,23 @@ def print_long():
     print('------------------------------------------------------------------')
 
 
+def publish_cmd(device_id, cmd):
+    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue='commands')
+
+    data = {
+        'device_id': device_id,
+        'command': cmd,
+        'timestamp': arrow.now().timestamp
+    }
+    channel.basic_publish(exchange='',
+                          routing_key='',
+                          body=json.dumps(data))
+    pprint.pprint(data)
+
+
 def main():
     device_id = None
     dev_short_id = None
@@ -100,12 +120,12 @@ def main():
             if not device_id:
                 print('Select a device')
                 continue
-            print(f'Start {device_id}')
+            publish_cmd(device_id, command.upper())
         elif command == 'stop':
             if not device_id:
                 print('Select a device')
                 continue
-            print(f'Stop {device_id}')
+            publish_cmd(device_id, command.upper())
         elif command == 'ls':
             print_bots()
         elif command == 'll':
