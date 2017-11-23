@@ -31,7 +31,7 @@ img:
 	$(DK) images
 
 # Build consumer container
-bcon:
+con:
 	$(DC) build consumer
 
 # Logs for consumer container
@@ -55,7 +55,7 @@ logsra:
 	$(DC) logs rabbit
 
 # Build producer container
-bprod:
+prod:
 	$(DC) build producer
 
 # Run producer container
@@ -63,7 +63,7 @@ rprod:
 	$(DC) run producer
 
 # Build CLI container
-bcli:
+cli:
 	$(DC) build cli
 
 # Removes all images
