@@ -11,4 +11,4 @@ RUN pip install .
 
 WORKDIR /home
 
-CMD /bin/bash
+CMD bots
