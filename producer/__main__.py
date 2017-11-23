@@ -15,16 +15,19 @@ def producer():
 
     channel.queue_declare(queue='hello')
 
+    # Create two unique device ids to provide more example data
+    timestamp = arrow.now().timestamp
+    device_name = b'A' if timestamp % 2 == 0 else b'B'
     '''
     This creates the same hash value each time so we can use the Raspberry Pi
     serial number to create a unique ID for each device
     '''
-    device_id = hashlib.sha1(b'RPi-serial-number').hexdigest()
+    device_id = hashlib.sha1(device_name).hexdigest()
 
     # Currently a python dict
     data = {
         'device_id': device_id,
-        'timestamp': arrow.now().timestamp,
+        'timestamp': timestamp,
         'data': {
             'key': 'value'
         }
