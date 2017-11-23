@@ -54,6 +54,9 @@ rablog:
 prod:
 	$(DC) run producer
 
+buildcli:
+	$(DC) build cli
+
 # Removes all images
 rmi:
 	$(DK) rmi -f $(shell $(DK) images -q)

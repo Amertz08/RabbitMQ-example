@@ -17,6 +17,9 @@ services:
         source: ./logs
         target: /var/log/app
 
+  cli:
+    build: ./cli
+
   rabbit:
     image: rabbitmq:3.6
 
