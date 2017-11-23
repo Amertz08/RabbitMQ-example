@@ -30,31 +30,40 @@ dps:
 img:
 	$(DK) images
 
+# Build consumer container
+bcon:
+	$(DC) build consumer
+
 # Logs for consumer container
-conlog:
+logscon:
 	$(DC) logs consumer
 
 # Shows application logging for consumer container
-conflog:
+flogcon:
 	cat ./logs/consumer.log | grep root.
 
 # Logs for producer container
-prodlog:
+logsprod:
 	$(DC) logs producer
 
 # Shows application logging for producer container
-prodflog:
+flogprod:
 	cat ./logs/producer.log | grep root.
 
 # Logs for RabbitMQ
-rablog:
+logsra:
 	$(DC) logs rabbit
 
+# Build producer container
+bprod:
+	$(DC) build producer
+
 # Run producer container
-prod:
+rprod:
 	$(DC) run producer
 
-buildcli:
+# Build CLI container
+bcli:
 	$(DC) build cli
 
 # Removes all images
