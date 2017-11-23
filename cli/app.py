@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import arrow
-import click
 import sys
 
 from bson.son import SON
@@ -11,13 +10,29 @@ client = MongoClient('db')
 db = client.test_db
 
 
-@click.group()
-def cli():
-    pass
+def get_target(device_id):
+    device_list = db.bot_logs.distinct('device_id')
+    n = len(device_id)
+    target_ids = []
+    for dev in device_list:
+        if dev[:n] == device_id:
+            target_ids.append(dev)
+
+    if not target_ids:
+        print(f'Device: "{device_id}" not found')
+        print('use "ls" to print list of devices or "long" for full ids')
+        return None
+
+    if len(target_ids) > 1:
+        print(f'Multiple targets found for "{device_id}" be more specific')
+        for dev_id in target_ids:
+            print(f'device_id: {dev_id}')
+        return None
+
+    return target_ids.pop()
 
 
-@cli.command(help='Lists devices and last seen time')
-def list():
+def print_bots():
     device_list = db.bot_logs.aggregate([
         {'$sort': SON([('timestamp', -1)])},
         {'$group': {'_id': '$device_id', 'timestamp': {'$first': '$timestamp'}}}
@@ -33,31 +48,70 @@ def list():
     print('------------------------------------')
 
 
-@cli.command(help='Send stop command to device')
-@click.argument('device_id')
-def stop(device_id):
+def print_long():
     device_list = db.bot_logs.distinct('device_id')
-
-    n = len(device_id)
-    target_ids = []
+    print('--------------------------------------------')
     for dev in device_list:
-        if dev[:n] == device_id:
-            target_ids.append(dev)
+        print(f'| {dev} |')
+    print('--------------------------------------------')
 
-    if not target_ids:
-        print(f'Device: "{device_id}" not found')
-        print('use "bots list" to print list of devices')
-        sys.exit()
 
-    if len(target_ids) > 1:
-        print(f'Multiple targets found for "{device_id}" be more specific')
-        for dev_id in target_ids:
-            print(f'device_id: {dev_id}')
-        sys.exit()
+def main():
+    device_id = None
+    dev_short_id = None
 
-    target_id = target_ids.pop()
-    print(f'Stop command sent to: {target_id}')
+    def dialog():
+        print('''
+        Commands:
+            ls      : prints devices
+            long    : prints entire device id
+            start   : moves forward
+            stop    : stops bot
+            use     : use device
+            drop    : deselect device
+            exit    : exit interactive drive
+        ''')
+
+    dialog()
+    while True:
+        try:
+            comm_line = input(f'[{dev_short_id if dev_short_id else "----------"}]> ')
+        except KeyboardInterrupt:
+            print('\nExiting...')
+            sys.exit()
+
+        comm_vals = comm_line.split()
+        if not comm_vals:
+            dialog()
+            continue
+
+        command = comm_vals[0]
+        if command == 'exit':
+            print('Exiting...')
+            sys.exit()
+        elif command == 'start':
+            if not device_id:
+                print('Select a device')
+                continue
+            print(f'Start {device_id}')
+        elif command == 'stop':
+            if not device_id:
+                print('Select a device')
+                continue
+            print(f'Stop {device_id}')
+        elif command == 'ls':
+            print_bots()
+        elif command == 'long':
+            print_long()
+        elif command == 'use':
+            device_id = get_target(comm_vals[1])
+            dev_short_id = device_id[:10] if device_id else None
+        elif command == 'drop':
+            device_id = None
+            dev_short_id = None
+        else:
+            dialog()
 
 
 if __name__ == '__main__':
-    cli()
+    main()

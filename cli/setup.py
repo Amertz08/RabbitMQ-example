@@ -6,6 +6,6 @@ setup(
     py_modules=['app'],
     entry_points='''
         [console_scripts]
-        bots=app:cli
+        bots=app:main
     ''',
 )
