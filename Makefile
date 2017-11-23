@@ -78,5 +78,9 @@ stop:
 rm:
 	$(DK) rm -f $(CONTS)
 
+# Removes all container with no tags
+rmn:
+	$(DK) rmi $(shell $(DK) images | grep "^<none>" | awk "{print $3}")
+
 # Removes containers and all images
 clean: rm rmi
