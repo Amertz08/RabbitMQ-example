@@ -20,7 +20,7 @@ def get_target(device_id):
 
     if not target_ids:
         print(f'Device: "{device_id}" not found')
-        print('use "ls" to print list of devices or "long" for full ids')
+        print('use "ls" to print list of devices or "ll" for full ids')
         return None
 
     if len(target_ids) > 1:
@@ -49,11 +49,18 @@ def print_bots():
 
 
 def print_long():
-    device_list = db.bot_logs.distinct('device_id')
-    print('--------------------------------------------')
+    device_list = db.bot_logs.aggregate([
+        {'$sort': SON([('timestamp', -1)])},
+        {'$group': {'_id': '$device_id', 'timestamp': {'$first': '$timestamp'}}}
+    ])
+    print('------------------------------------------------------------------')
+    print('|                 device_id                |      last_seen      |')
+    print('------------------------------------------------------------------')
     for dev in device_list:
-        print(f'| {dev} |')
-    print('--------------------------------------------')
+        dev_id = dev['_id']
+        last_seen = arrow.get(dev['timestamp']).format('YYYY-MM-DD HH:mm:ss')
+        print(f'| {dev_id} | {last_seen} |')
+    print('------------------------------------------------------------------')
 
 
 def main():
@@ -64,7 +71,7 @@ def main():
         print('''
         Commands:
             ls      : prints devices
-            long    : prints entire device id
+            ll      : prints entire device id
             start   : moves forward
             stop    : stops bot
             use     : use device
@@ -101,11 +108,14 @@ def main():
             print(f'Stop {device_id}')
         elif command == 'ls':
             print_bots()
-        elif command == 'long':
+        elif command == 'll':
             print_long()
         elif command == 'use':
-            device_id = get_target(comm_vals[1])
-            dev_short_id = device_id[:10] if device_id else None
+            new_id = get_target(comm_vals[1])
+            if new_id is None:
+                continue
+            device_id = new_id
+            dev_short_id = device_id[:10]
         elif command == 'drop':
             device_id = None
             dev_short_id = None
