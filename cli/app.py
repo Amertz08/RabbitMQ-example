@@ -14,6 +14,7 @@ db = client.test_db
 
 
 def get_target(device_id):
+    """Returns full hash id for given short id or None"""
     device_list = db.bot_logs.distinct('device_id')
     n = len(device_id)
     target_ids = []
@@ -36,6 +37,7 @@ def get_target(device_id):
 
 
 def print_bots():
+    """Prints first 10 characters of device id hash"""
     device_list = db.bot_logs.aggregate([
         {'$sort': SON([('timestamp', -1)])},
         {'$group': {'_id': '$device_id', 'timestamp': {'$first': '$timestamp'}}}
@@ -52,6 +54,7 @@ def print_bots():
 
 
 def print_long():
+    """Prints entire device hash id"""
     device_list = db.bot_logs.aggregate([
         {'$sort': SON([('timestamp', -1)])},
         {'$group': {'_id': '$device_id', 'timestamp': {'$first': '$timestamp'}}}
@@ -67,6 +70,7 @@ def print_long():
 
 
 def publish_cmd(device_id, cmd):
+    """Publishes command to command queue"""
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
 
@@ -83,23 +87,26 @@ def publish_cmd(device_id, cmd):
     pprint.pprint(data)
 
 
+def print_dialog():
+    """Prints command dialog"""
+    print('''
+    Commands:
+        ls      : prints devices
+        ll      : prints entire device id
+        start   : moves forward
+        stop    : stops bot
+        use     : use device
+        drop    : deselect device
+        exit    : exit interactive drive
+    ''')
+
+
 def main():
+    """Main execution for application"""
     device_id = None
     dev_short_id = None
 
-    def dialog():
-        print('''
-        Commands:
-            ls      : prints devices
-            ll      : prints entire device id
-            start   : moves forward
-            stop    : stops bot
-            use     : use device
-            drop    : deselect device
-            exit    : exit interactive drive
-        ''')
-
-    dialog()
+    print_dialog()
     while True:
         try:
             comm_line = input(f'[{dev_short_id if dev_short_id else "----------"}]> ')
@@ -109,7 +116,7 @@ def main():
 
         comm_vals = comm_line.split()
         if not comm_vals:
-            dialog()
+            print_dialog()
             continue
 
         command = comm_vals[0]
@@ -131,6 +138,9 @@ def main():
         elif command == 'll':
             print_long()
         elif command == 'use':
+            if len(comm_vals) < 2:
+                print('Provide a device id')
+                continue
             new_id = get_target(comm_vals[1])
             if new_id is None:
                 continue
@@ -140,7 +150,7 @@ def main():
             device_id = None
             dev_short_id = None
         else:
-            dialog()
+            print_dialog()
 
 
 if __name__ == '__main__':
