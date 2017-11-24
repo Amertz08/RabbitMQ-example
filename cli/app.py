@@ -70,6 +70,7 @@ def print_bots():
 
 def print_long():
     """Prints entire device hash id"""
+
     device_list = db.bot_logs.aggregate([
         {'$sort': SON([('timestamp', -1)])},
         {'$group': {'_id': '$device_id', 'timestamp': {'$first': '$timestamp'}}}

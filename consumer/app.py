@@ -15,21 +15,31 @@ db = client.test_db
 QUEUE_NAME = 'device_logs'
 
 
+def callback(ch, method, properties, body):
+    """
+    Handles consumption of messages in queue
+    :param ch: channel object
+    :param method:
+    :param properties:
+    :param body: message body
+    :return:
+    """
+    data = json.loads(body)  # decode JSON string into a python dict
+    msg = f' [x] Received: {data} type {type(data)}'
+    print(msg)
+    logging.info(msg)
+
+    bot_logs = db.bot_logs
+    bot_logs.insert_one(data)
+    pprint.pprint(bot_logs.find_one())
+
+
 def consumer():
+    """Reads from queue"""
+
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
     channel.queue_declare(queue=QUEUE_NAME)
-
-    def callback(ch, method, properties, body):
-        data = json.loads(body)  # decode JSON string into a python dict
-        msg = f' [x] Received: {data} type {type(data)}'
-        print(msg)
-        logging.info(msg)
-
-        bot_logs = db.bot_logs
-        bot_logs.insert_one(data)
-        pprint.pprint(bot_logs.find_one())
-
     channel.basic_consume(callback,
                           queue=QUEUE_NAME,
                           no_ack=True)

@@ -12,6 +12,8 @@ QUEUE_NAME = 'device_logs'
 
 
 def producer():
+    """Sends data to queue"""
+
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
 
