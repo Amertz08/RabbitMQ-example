@@ -14,14 +14,25 @@ db = client.test_db
 
 
 def _get_target(target, devices):
-    """Generator that returns devices that match target"""
+    """
+    Generator that returns devices that match target
+    :param target: partial hash id to find
+    :param devices: list of devices
+    :return: list of device hashes if found
+    """
+
     for dev in devices:
         if dev[:len(target)] == target:
             yield dev
 
 
 def get_target(device_id):
-    """Returns full hash id for given short id or None"""
+    """
+    Returns full hash id for given short id or None
+    :param device_id: partial hash to target
+    :return: device full hash id
+    """
+
     device_list = db.bot_logs.distinct('device_id')
     target_ids = [dev for dev in _get_target(device_id, device_list)]
 
@@ -41,6 +52,7 @@ def get_target(device_id):
 
 def print_bots():
     """Prints first 10 characters of device id hash"""
+
     device_list = db.bot_logs.aggregate([
         {'$sort': SON([('timestamp', -1)])},
         {'$group': {'_id': '$device_id', 'timestamp': {'$first': '$timestamp'}}}
@@ -73,7 +85,13 @@ def print_long():
 
 
 def publish_cmd(device_id, cmd):
-    """Publishes command to command queue"""
+    """
+    Publishes command to command queue
+    :param device_id: device hash to send message to
+    :param cmd: command to send
+    :return: None
+    """
+
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
 
@@ -92,6 +110,7 @@ def publish_cmd(device_id, cmd):
 
 def print_dialog():
     """Prints command dialog"""
+
     print('''
     Commands:
         ls      : prints devices
@@ -106,6 +125,7 @@ def print_dialog():
 
 def main():
     """Main execution for application"""
+
     device_id = None
     dev_short_id = None
 
