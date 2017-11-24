@@ -12,11 +12,13 @@ logging.basicConfig(filename='/var/log/app/consumer.log', level=logging.DEBUG)
 client = MongoClient('db')
 db = client.test_db
 
+QUEUE_NAME = 'device_logs'
+
 
 def consumer():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
-    channel.queue_declare(queue='device_logs')
+    channel.queue_declare(queue=QUEUE_NAME)
 
     def callback(ch, method, properties, body):
         data = json.loads(body)  # decode JSON string into a python dict
@@ -29,7 +31,7 @@ def consumer():
         pprint.pprint(bot_logs.find_one())
 
     channel.basic_consume(callback,
-                          queue='hello',
+                          queue=QUEUE_NAME,
                           no_ack=True)
     msg = ' [*] Waiting for messages. To exit press CTRL+C'
     print(msg)

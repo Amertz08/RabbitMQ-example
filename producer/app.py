@@ -8,12 +8,14 @@ import pika
 
 logging.basicConfig(filename='/var/log/app/producer.log', level=logging.DEBUG)
 
+QUEUE_NAME = 'device_logs'
+
 
 def producer():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit'))
     channel = connection.channel()
 
-    channel.queue_declare(queue='device_logs')
+    channel.queue_declare(queue=QUEUE_NAME)
 
     # Create two unique device ids to provide more example data
     timestamp = arrow.now().timestamp
@@ -34,7 +36,7 @@ def producer():
     }
 
     channel.basic_publish(exchange='',
-                          routing_key='hello',
+                          routing_key=QUEUE_NAME,
                           body=json.dumps(data))  # Encode as a JSON string
     msg = f' [x] Sent {data}'
     print(msg)
