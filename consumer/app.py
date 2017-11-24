@@ -18,12 +18,17 @@ QUEUE_NAME = 'device_logs'
 def callback(ch, method, properties, body):
     """
     Handles consumption of messages in queue
-    :param ch: channel object
-    :param method:
+    :param ch: Channel object consumer is listening to
+    :type ch: pika.Channel
+    :param method: Method object
+    :type method: pika.spec.Basic.Deliver
     :param properties:
+    :type properties: pika.spec.BasicProperties
     :param body: message body
+    :type body: bytes
     :return:
     """
+
     data = json.loads(body)  # decode JSON string into a python dict
     msg = f' [x] Received: {data} type {type(data)}'
     print(msg)
