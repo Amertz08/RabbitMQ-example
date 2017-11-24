@@ -15,9 +15,8 @@ db = client.test_db
 
 def _get_target(target, devices):
     """Generator that returns devices that match target"""
-    n = len(target)
     for dev in devices:
-        if dev[:n] == target:
+        if dev[:len(target)] == target:
             yield dev
 
 
