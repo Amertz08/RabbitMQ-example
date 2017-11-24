@@ -24,7 +24,7 @@ $ docker-compose run producer
 $ docker-compose run producer bash
 
 // Now in container
-root@c82061d93b6c:/usr/src/producer# python .
+root@c82061d93b6c:/usr/src/producer# python app.py
 
 // Check consumer logs
 $ docker-compose logs consumer
@@ -33,7 +33,7 @@ $ docker-compose logs consumer
 $ docker-compose run consumer bash
 
 // Now in container
-root@c82061d93b6c:/usr/src/consumer# python .
+root@c82061d93b6c:/usr/src/consumer# python app.py
 
 // Shutdown all containers
 $ docker-compose down
