@@ -13,14 +13,18 @@ client = MongoClient('db')
 db = client.test_db
 
 
+def _get_target(target, devices):
+    """Generator that returns devices that match target"""
+    n = len(target)
+    for dev in devices:
+        if dev[:n] == target:
+            yield dev
+
+
 def get_target(device_id):
     """Returns full hash id for given short id or None"""
     device_list = db.bot_logs.distinct('device_id')
-    n = len(device_id)
-    target_ids = []
-    for dev in device_list:
-        if dev[:n] == device_id:
-            target_ids.append(dev)
+    target_ids = [dev for dev in _get_target(device_id, device_list)]
 
     if not target_ids:
         print(f'Device: "{device_id}" not found')
